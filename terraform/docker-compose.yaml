@@ -1,0 +1,14 @@
+version: '3'
+services:
+  terraform:
+    image: hashicorp/terraform:1.1.4
+    environment:
+      - http_proxy
+      - https_proxy
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - AWS_SESSION_TOKEN
+    volumes:
+      - .:/workspace
+    working_dir: /workspace
