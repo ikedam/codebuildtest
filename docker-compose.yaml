@@ -8,5 +8,16 @@ services:
     volumes:
       - .:/workspace
     working_dir: /workspace
-    command:
-      - /bin/bash
+    entrypoint: go
+  aws:
+    image: amazon/aws-cli:2.4.15
+    environment:
+      - http_proxy
+      - https_proxy
+      - AWS_ACCESS_KEY_ID
+      - AWS_SECRET_ACCESS_KEY
+      - AWS_DEFAULT_REGION
+      - AWS_SESSION_TOKEN
+    volumes:
+      - .:/workspace
+    working_dir: /workspace

@@ -1,0 +1,15 @@
+# https://docs.aws.amazon.com/codebuild/latest/userguide/getting-started-cli-create-build-spec.html
+# https://docs.aws.amazon.com/codebuild/latest/userguide/build-spec-ref.html
+version: 0.2
+
+phases:
+  pre_build:
+    commands:
+      # To avoid: toomanyrequests: You have reached your pull rate limit. You may increase the limit by authenticating and upgrading: https://www.docker.com/increase-rate-limit
+      # You can find image names in public.ecr.aws in https://gallery.ecr.aws/
+      - docker pull public.ecr.aws/docker/library/golang:1.17.6-bullseye
+      - docker tag public.ecr.aws/docker/library/golang:1.17.6-bullseye golang:1.17.6-bullseye
+      - docker-compose build
+  build:
+    commands:
+      - docker-compose run --rm go test -v ./...
