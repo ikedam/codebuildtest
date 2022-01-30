@@ -11,4 +11,8 @@ services:
       - AWS_SESSION_TOKEN
     volumes:
       - .:/workspace
+      - terraform:/workspace/.terraform
     working_dir: /workspace
+
+volumes:
+  terraform: {}
