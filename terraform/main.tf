@@ -114,15 +114,17 @@ resource "aws_codebuild_project" "codebuild" {
 
   environment {
     compute_type                = "BUILD_GENERAL1_SMALL"
-    image                       = "aws/codebuild/standard:2.0"
     type                        = "LINUX_CONTAINER"
     image_pull_credentials_type = "CODEBUILD"
+    // https://docs.aws.amazon.com/ja_jp/codebuild/latest/userguide/build-env-ref-available.html
+    image                       = "aws/codebuild/standard:5.0"
+    // This is required to use docker in codebuild.
+    privileged_mode             = true
   }
 
   logs_config {
     cloudwatch_logs {
-      group_name  = "${var.project_name}-codebuild"
-      stream_name = "codebuild"
+      group_name  = "codebuild-${var.project_name}"
     }
   }
 
@@ -143,4 +145,8 @@ output "s3_source" {
 
 output "s3_result" {
     value = aws_s3_bucket.result.bucket
+}
+
+output "log_group" {
+    value = aws_codebuild_project.codebuild.logs_config[0].cloudwatch_logs[0].group_name
 }
