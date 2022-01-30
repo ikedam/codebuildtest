@@ -35,6 +35,7 @@ resource "aws_s3_bucket" "result" {
   }
 }
 
+// https://docs.aws.amazon.com/codebuild/latest/userguide/setting-up.html#setting-up-service-role
 resource "aws_iam_role" "codebuild" {
   name = "${var.project_name}-codebuild"
 
@@ -47,6 +48,8 @@ resource "aws_iam_role" "codebuild" {
         Principal = {
           Service = "codebuild.amazonaws.com"
         }
+        // This cause InvalidInputException: CodeBuild is not authorized to perform: sts:AssumeRole on arn:aws:iam::...
+        /*
         Condition = {
           StringEquals = {
             "aws:SourceAccount" = data.aws_caller_identity.current.account_id
@@ -55,12 +58,12 @@ resource "aws_iam_role" "codebuild" {
             "aws:SourceArn" = "arn:aws:codebuild:${data.aws_region.current.name}:${data.aws_caller_identity.current.account_id}:project/${var.project_name}"
           }
         }
+        */
       },
     ]
   })
 }
 
-// https://docs.aws.amazon.com/codebuild/latest/userguide/setting-up.html#setting-up-service-role
 resource "aws_iam_role_policy" "codebuild" {
   role = aws_iam_role.codebuild.name
 
