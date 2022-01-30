@@ -25,6 +25,10 @@ resource "aws_s3_bucket" "source" {
     expiration {
       days = 1
     }
+
+    noncurrent_version_expiration {
+      days = 1
+    }
   }
 }
 
