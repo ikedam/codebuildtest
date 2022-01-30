@@ -132,3 +132,15 @@ resource "aws_codebuild_project" "codebuild" {
     location = "${aws_s3_bucket.source.arn}/source.zip"
   }
 }
+
+output "codebuild_project" {
+    value = aws_codebuild_project.codebuild.name
+}
+
+output "s3_source" {
+    value = aws_s3_bucket.source.bucket
+}
+
+output "s3_result" {
+    value = aws_s3_bucket.result.bucket
+}
