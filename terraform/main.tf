@@ -13,6 +13,12 @@ resource "aws_s3_bucket" "source" {
   bucket = "${data.aws_caller_identity.current.account_id}-${var.project_name}-source"
   acl    = "private"
 
+  // Required for Jenkins AWS CodeBuild plugin
+  // (optional otherwise)
+  versioning {
+    enabled = true
+  }
+
   lifecycle_rule {
     enabled = true
 
@@ -83,6 +89,9 @@ resource "aws_iam_role_policy" "codebuild" {
         Effect = "Allow"
         Action = [
           "s3:GetObject",
+          // Required for Jenkins AWS CodeBuild plugin
+          // (optional otherwise)
+          "s3:GetObjectVersion",
         ]
         Resource = [
           "${aws_s3_bucket.source.arn}",

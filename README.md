@@ -72,9 +72,57 @@ s3_source = "xxxxxxxxxxxx-codebuildtest-source"
     * This doesn't exit even after the build completes, and you sould exit with Ctrl+C.
 
 
-## TODOs
+## Run with Jenkins
 
-* Use Jenkins
+[Jenkins AWS CodeBuild plugin](https://plugins.jenkins.io/aws-codebuild/) provides a feature to stream logs and you can use codebuild just like cloudbuild.
+
+* Launch Jenkins
+
+    ```sh
+    docker-compose up -d jenkins
+    ```
+
+* Setup Jenkins
+
+    * Access http://127.0.0.1:8080/
+    * You can get the initial administrator password with:
+
+        ```sh
+        docker-compose logs jenkins
+        ```
+
+    * Install plugins during wizard:
+        * Pipeline (workflow-aggregator)
+        * Git (git)
+
+    * Install plugins after completing wizard:
+        * AWS CodeBuild (aws-codebuild)
+
+* Register credentials
+
+    * Go Manage Jenkins > Manage Credentials
+    * Open `(global)` Domains in Jenkins Store.
+    * Add credentials
+        * Kind: CodeBuild Credentials
+        * Scope Global
+        * ID: codebuild-credentials
+            * Or any you like.
+        * AWS Access Key: (the one in your environment)
+        * AWS Secret Access Key: (the one in your environment)
+
+* Edit Jenkinsfile, following parts:
+    * projectName
+    * region
+
+* Create a pipeline job:
+    * Definition: Pipeline script from SCM
+    * SCM: Git
+    * Repository URL: /workspace
+    * Branch Specifier: `*/main`
+    * Script Path: Jenkinsfile
+    * Lightweight checkout: checked
+
+## TODOs
 
 * Upload artifacts to S3
 
