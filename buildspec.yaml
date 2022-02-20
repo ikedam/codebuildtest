@@ -12,4 +12,5 @@ phases:
       - docker-compose build
   build:
     commands:
-      - docker-compose run --rm go test -v ./...
+      - ls -l scripts/
+      - ./scripts/unittest.sh
